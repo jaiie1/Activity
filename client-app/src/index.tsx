@@ -5,10 +5,8 @@ import 'semantic-ui-css/semantic.min.css'
 import App from './app/layout/App';
 import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ReactDOM.render( 
+    <App />,
   document.getElementById('root')
 );
 
