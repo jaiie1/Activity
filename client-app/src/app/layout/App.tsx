@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import  './App';
 import { Container} from 'semantic-ui-react';
 import { Activity } from '../models/activity';
@@ -8,30 +8,19 @@ import {v4 as uuid} from 'uuid';
 import agent from '../api/agent';
 import LoadingComponent from './loadingComponent';
 import { useStore } from '../stores/store';
+import { observer } from 'mobx-react-lite';
 
 function App () {
   const {activityStore} = useStore();
-
-
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selectedActivity, setSelectedtActivity] = useState<Activity | undefined>(undefined);
   const [editMode, setEditMode] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
 
-  useState(() => {
-    agent.Activities.list().then(res => {      
-      let activities: Activity[] = [];
-      res.forEach(activity => {
-        activity.date = activity.date.split('T')[0];
-        activities.push(activity);
-        });
-        
-        setActivities(res);
-        setLoading(false);
-      })
-  },)
+  useEffect(() => {
+    activityStore.loadActivities();
+  }, [activityStore]);
 
   function handelSelectActivity(id: string) {
     setSelectedtActivity(activities.find(x => x.id === id));
@@ -78,21 +67,14 @@ function App () {
     })
   }
 
-  if(loading) return <LoadingComponent content='Loading activities...'/>
+  if(activityStore.loadingInitial) return <LoadingComponent content='Loading activities...'/>
 
   return (
     <>     
-      <Navbar openForm={handelFormOpen} />
-      <Container style={{marginTop: '7em'}}>
-        <h2>{activityStore.title}</h2>
+      <Navbar/>
+      <Container style={{marginTop: '7em'}}>        
       <ActivityDashBoard 
-        activities={activities}
-        selectedActivity={selectedActivity}
-        selectActivity={handelSelectActivity}
-        cancelSelectActivity={handelCancelActivity}
-        editMode={editMode}
-        openForm={handelFormOpen}
-        closeForm={handelFormClose}
+        activities={activityStore.activities}  
         createOrEdit={handelCreateOrEditActivity}
         deleteActivity={handleDeleteActivity}
         submitting={submitting}
@@ -103,4 +85,4 @@ function App () {
  }
 
 
-export default App;
+export default observer(App);
