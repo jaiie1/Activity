@@ -9,12 +9,11 @@ import ActivityForm from "./activites/form/ActivityForm";
 
 
 export default observer(function ActivityDashBoard() {
-
     const { activityStore } = useStore();
-
+    const { loadActivities, activityRegistry } = activityStore;
 
     useEffect(() => {
-        activityStore.loadActivities();
+        if (activityRegistry.size <= 1) loadActivities();
     }, [activityStore]);
 
     if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities...' />
