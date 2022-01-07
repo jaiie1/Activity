@@ -1,7 +1,7 @@
 import React from 'react';
 import './App';
 import { Container } from 'semantic-ui-react';
-import ActivityDashBoard from '../feature/ActivityDashBoard';
+import ActivityDashBoard from '../feature/activites/dashboard/ActivityDashBoard';
 import Navbar from './NavBar';
 import { observer } from 'mobx-react-lite';
 import { Route, useLocation } from 'react-router-dom';

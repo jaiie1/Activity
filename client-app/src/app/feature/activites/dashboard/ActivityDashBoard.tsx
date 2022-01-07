@@ -1,10 +1,10 @@
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import LoadingComponent from "../layout/loadingComponent";
-import { useStore } from "../stores/store";
-import ActivityList from "./activites/dashboard/ActivityList";
-import ActivityForm from "./activites/form/ActivityForm";
+import LoadingComponent from "../../../layout/loadingComponent";
+import { useStore } from "../../../stores/store";
+import ActivityList from "./ActivityList";
+import ActivityFilters from "./ActivityFilters";
 
 
 
@@ -25,9 +25,7 @@ export default observer(function ActivityDashBoard() {
                 <ActivityList />
             </Grid.Column>
             <Grid.Column width='6'>
-                <h2>Filter</h2>
-                <ActivityForm
-                />
+                <ActivityFilters />              
             </Grid.Column>
         </Grid>
     )

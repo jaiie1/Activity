@@ -30,7 +30,7 @@ export default observer(function ActivityForm() {
     });   
 
     useEffect(() => {
-        if(id) loadActivity(id).then(activity => setActivity(activity!)).finally(() => loading == false);       
+        if(id) loadActivity(id).then(activity => setActivity(activity!)).finally(() => loading === false);       
     }, [id, loadActivity]);
 
     function handleSubmit() {
