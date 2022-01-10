@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using API.Extenstions;
+using FluentValidation.AspNetCore;
+using Application.Activities;
+using API.Middleware;
 
 namespace API
 {
@@ -19,20 +22,26 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(config => 
+            {
+                config.RegisterValidatorsFromAssemblyContaining<Create>();
+                
+            });
             services.AddApplicationsServices(_config);
             
         } 
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            
+
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
+            {                
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
-
             //app.UseHttpsRedirection();
 
             app.UseRouting();
