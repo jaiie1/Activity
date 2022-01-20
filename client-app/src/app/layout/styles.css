@@ -14,6 +14,12 @@ body{
 
 }
 
+.react-datepicker-wrapper {
+  width: 100%;
+  border: none;
+  box-shadow: 1px 2px 5px 0px rgba(34,36,38,.15);  
+}
+
 .masthead {
   display: flex;
   align-items: center;
