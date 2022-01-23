@@ -5,9 +5,7 @@ import { useStore } from '../stores/store';
 
 
 
-export default function NavBar() {
-
-    const {activityStore} = useStore();
+export default function NavBar() {    
     
     return (
         <Menu inverted fixed='top'>

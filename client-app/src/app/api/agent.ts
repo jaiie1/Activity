@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { EAFNOSUPPORT } from "constants";
 import { toast } from "react-toastify";
 import { history } from "../..";
 
