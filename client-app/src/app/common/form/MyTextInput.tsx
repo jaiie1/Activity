@@ -6,7 +6,9 @@ interface Props
 {
     placeholder: string;
     name: string;
+    type?: string;
     label?: string;
+    
 }
 
 export default function MyTextInput(props: Props) {
