@@ -4,12 +4,12 @@ import { Button, Header, Label } from 'semantic-ui-react';
 import MyTextInput from '../../common/form/MyTextInput';
 import { useStore } from '../../stores/store';
 import * as Yup from 'yup';
-import { dir } from 'console';
 import ValidationErrors from '../errors/ValidationErrors';
+import LoginForm from './LoginForm';
 
 
 export default function RegisterForm() {
-    const {userStore} = useStore();
+    const {modelStore, userStore} = useStore();
     return (
         <Formik
         initialValues={{displayName: '', usernamne: '', email: '', password: '', error: null}}
@@ -43,6 +43,14 @@ export default function RegisterForm() {
                     <Button disabled={!isValid || !dirty || isSubmitting} 
                     loding={isSubmitting} 
                     positive content='Register' type='submit' fluid />
+
+                    <Header as='h3' content='Har du redan ett konto?' color='teal' textAlign='center' />
+                    <Button.Group>
+                        <Button onClick={() => modelStore.openModal(<LoginForm />)}
+                            content='Login' type='register' fluid positive />
+                        <Button.Or />
+                        <Button onClick={() => modelStore.closeModel()} content='Back' color='blue' fluid />
+                    </Button.Group>
                 </Form>
             )}
 

@@ -22,7 +22,6 @@ export default observer(function ActivityDetails() {
         if(id) loadActivity(id);
     }, [id, loadActivity]);
 
-
     if(loadingInitial || !activity) return <LoadingComponent/>;
 
     return (
@@ -33,7 +32,7 @@ export default observer(function ActivityDetails() {
               <ActivityDetailedChat />
          </Grid.Column>
          <Grid.Column width={6}>
-             <ActivityDetaieldSidebar />
+             <ActivityDetaieldSidebar activity={activity} />
          </Grid.Column>
         </Grid>
     )

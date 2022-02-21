@@ -24,11 +24,13 @@ export default function HomePage() {
                 ) : (
                     <>
                         <Button onClick={() => modelStore.openModal(<LoginForm />)}  size='huge' inverted>
-                            Login!
+                            Logga in
                         </Button>
                         <Button onClick={() => modelStore.openModal(<RegisterForm />)} size='huge' inverted>
-                            Register
+                            Skapa konto
                         </Button>
+                        
+
                     </>
 
                 )}

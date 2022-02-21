@@ -1,28 +1,40 @@
 import { format } from 'date-fns';
 import React from "react";
+import { act } from 'react-dom/test-utils';
 import { Link } from "react-router-dom";
-import { Button, Icon, Item, Segment } from "semantic-ui-react";
+import { Button, Icon, Item, Label, Popup, Segment } from "semantic-ui-react";
 import { Activity } from "../../../models/activity";
+import { Profile } from '../../../models/profile';
+import ActivityListItemAttendee from './ActivityListItemAttendee';
 
 interface Props {
-    activity: Activity
+    activity: Activity    
 }
 
 
-export default function ActivityListItem({ activity }: Props) {
+export default function ActivityListItem({ activity}: Props) {
  
 
     return (
         <Segment.Group>
             <Segment>
-                <Item.Group>
-                    <Item.Image size='tiny' circular src='/assets/user.png' />
+                {activity.isCancelled && 
+                    <Label attached='top' color='red' content='Cancelled' style={{textAlign: 'center'}}></Label>
+                }
+                <Item.Group>                 
+                    <Item.Image style={{marginBottom: 3}} size='tiny' circular src='/assets/user.png' />
                     <Item>
                         <Item.Content>
                             <Item.Header as={Link} to={`/activities/${activity.id}`}>
                                 {activity.title}
                             </Item.Header>
-                            <Item.Description> Hosted By</Item.Description>
+                            <Item.Description> Hosted By {activity.host?.displayName}</Item.Description>
+                            {activity.isHost && (
+                                <Item.Description><Label basic color='orange'> You are hosting this activity</Label></Item.Description>
+                            )}
+                            {activity.isGoing && !activity.isHost && (
+                                <Item.Description><Label basic color='green'> You are going to this activity</Label></Item.Description>
+                            )}
                         </Item.Content>
                     </Item>
                 </Item.Group>
@@ -34,7 +46,7 @@ export default function ActivityListItem({ activity }: Props) {
                 </span>
             </Segment>
             <Segment secondary>
-                Attendees will go here
+                <ActivityListItemAttendee attendees={activity.attendees!}/>
             </Segment>
             <Segment clearing>
                 <span>{activity.description}</span>

@@ -11,7 +11,7 @@ import MyTextArea from "../../../common/form/MyTextArea";
 import MySelectedInput from "../../../common/form/MySelectedInput";
 import { categoryOptions } from "../../../common/options/categoryOptions";
 import MyDateInput from "../../../common/form/MyDateInput";
-import { Activity } from "../../../models/activity";
+import { Activity, ActivityFormValues } from "../../../models/activity";
 import { v4 as uuid } from 'uuid';
 
 
@@ -24,16 +24,7 @@ export default observer(function ActivityForm() {
 
     const { id } = useParams<{ id: string }>();
 
-    const [activity, setActivity] = useState<Activity>({
-        id: '',
-        title: '',
-        date: null,
-        description: '',
-        category: '',
-        city: '',
-        venue: ''
-
-    });
+    const [activity, setActivity] = useState<ActivityFormValues>(new ActivityFormValues());
 
     const validationSchema = Yup.object({
         title: Yup.string().required('Title is required'),
@@ -46,16 +37,16 @@ export default observer(function ActivityForm() {
     });
 
     useEffect(() => {
-        if (id) loadActivity(id).then(activity => setActivity(activity!)).finally(() => loading === false);
+        if (id) loadActivity(id).then(activity => setActivity(new ActivityFormValues(activity))).finally(() => loading === false);
     }, [id, loadActivity]);
 
-    function handleFormSubmit(activity: Activity) {
-        if (activity.id.length === 0) {
+    function handleFormSubmit(activity: ActivityFormValues) {
+        if (!activity.id) {
            let newActivity = {
                 ...activity,
                 id: uuid()
             };
-            createActivity(newActivity).then(() => history.push(`/activities/${newActivity.id}`));
+            createActivity(newActivity as Activity).then(() => history.push(`/activities/${newActivity.id}`));
         } else {
             updateActivity(activity).then(() => history.push(`/activities/${activity.id}`));            
         } 
@@ -88,7 +79,7 @@ export default observer(function ActivityForm() {
                         <Header content='Location details' sub color='teal' />  
                         <MyTextInput name='city' placeholder='City' />
                         <MyTextInput name='venue' placeholder='Venue' /> 
-                        <Button loading={loading} 
+                        <Button loading={isSubmitting} 
                         floated="right" positive type='submit' 
                         content="Submit" 
                         disabled={!isValid || isSubmitting || !dirty} />                        
