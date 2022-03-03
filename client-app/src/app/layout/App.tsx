@@ -16,6 +16,7 @@ import LoginForm from '../feature/users/LoginForm';
 import { useStore } from '../stores/store';
 import LoadingComponent from './loadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
+import ProfilePage from '../feature/profiles/ProfilePage';
 
 function App() {
   const location = useLocation();
@@ -46,8 +47,8 @@ function App() {
               <Switch>
               <Route exact path='/activities' component={ActivityDashBoard} />
               <Route path='/activities/:id' component={ActivityDetails} />
-              <Route key={location.key} path={['/createActivity', '/manage/:id']} 
-              component={ActivityForm} />
+              <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
+              <Route path='/profile/:username' component={ProfilePage} />
               <Route path='/error' component={TestError} />
               <Route path='/server-error' component={ServerError} />
               <Route path='/login' component={LoginForm} />

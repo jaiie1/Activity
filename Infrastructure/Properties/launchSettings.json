@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Infrastructure": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\Anton\\Documents\\Reactivities\\API"
+    },
+    "Profile 1": {
+      "commandName": "Executable"
+    },
+    "Profile 2": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\Anton\\Documents\\Reactivities\\API"
+    }
+  }
+}
