@@ -2,8 +2,6 @@ import React from "react";
 import { Button, Divider, Grid, Header, Item, Reveal, Segment, Statistic } from "semantic-ui-react";
 import { Profile } from "../../models/profile";
 import { observer } from "mobx-react-lite";
-import { prettyFormat } from "@testing-library/react";
-import { promisify } from "util";
 
 interface Props {
    profile: Profile;

@@ -2,11 +2,10 @@ import React from 'react'
 import { Segment, List, Label, Item, Image } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import { Profile } from '../../../models/profile'
-import { profile } from 'console'
-import { Activity } from '../../../models/activity'
+import { Activity } from '../../../models/activity';
 
-export interface Props {
+
+interface Props {
     activity: Activity;
 }
 
@@ -26,9 +25,9 @@ export default observer(function ActivityDetailedSidebar({ activity: { attendees
             </Segment>
             <Segment attached>
                 <List relaxed divided>
-                    {attendees.map(attendees => (
-                        <Item style={{ position: 'relative' }} key={attendees.username}>
-                            {attendees.username === host?.username &&
+                    {attendees.map(attendee => (
+                        <Item style={{ position: 'relative' }} key={attendee.username}>
+                            {attendee.username === host?.username &&
                                 <Label
                                     style={{ position: 'absolute' }}
                                     color='orange'
@@ -36,15 +35,17 @@ export default observer(function ActivityDetailedSidebar({ activity: { attendees
                                 >
                                     Host
                                 </Label>}
-                            <Image size='tiny' src={attendees.image || '/assets/user.png'} />
+                            <Image size='tiny' src={attendee.image || '/assets/user.png'} />
                             <Item.Content verticalAlign='middle'>
                                 <Item.Header as='h3'>
-                                    <Link to={`/profile/${attendees.username}`}>{attendees.displayName}</Link>
+                                    <Link to={`/profiles/${attendee.username}`}>{attendee.displayName}</Link>
                                 </Item.Header>
-                                <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>
+                                {attendee &&
+                                <Item.Extra style={{ color: 'orange' }}>Following</Item.Extra>}
                             </Item.Content>
                         </Item>
                     ))}
+
                 </List>
             </Segment>
         </>

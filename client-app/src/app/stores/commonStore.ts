@@ -1,4 +1,3 @@
-import { WSAEINVAL } from "constants";
 import { makeAutoObservable, reaction } from "mobx";
 import { ServerError } from "../models/ServerError";
 

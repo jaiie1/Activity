@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { Activity, ActivityFormValues } from "../models/activity";
-import { Profile } from "../models/profile";
+import { Photo, Profile } from "../models/profile";
 import { User, UserFomValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -78,7 +78,7 @@ const Activities = {
     create: (activity: ActivityFormValues) => request.post<void>("/activities", activity),
     update: (activity: ActivityFormValues) => request.put<void>(`/activities/${activity.id}`, activity),
     delete: (id: string) => request.del<void>(`/activities/${id}`),
-    attend: (id: string) => request.post<void>(`/activities/${id}/attend`, {})
+    attend: (id: string) => request.post<void>(`/activities/${id}/attend`, {}) 
 }
 
 const Account = {
@@ -87,9 +87,19 @@ const Account = {
     register: (user: UserFomValues) => request.post<User>("/account/register", user)
 }
 
-const Profiles = {
-    get: (username: string) => request.get<Profile>(`/profile/${username}`)
-    
+const Profiles = {    
+    get: (username: string) => request.get<Profile>(`/profiles/${username}`),
+    uploadPhoto: (file: Blob) => {
+        let formData = new FormData();
+        formData.append('file', file);
+        return axios.post<Photo>('photos', formData, {
+            headers: { 'Content-type': 'multipart/form-data' }
+        })
+    },
+    setMainPhoto: (id: string) => request.post(`/photos/${id}/setMain`, {}),
+    deletePhoto: (id: string) => request.del(`/photos/${id}`),
+
+        
 }
 
 const agent = {

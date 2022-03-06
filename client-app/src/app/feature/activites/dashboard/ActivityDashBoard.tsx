@@ -14,7 +14,8 @@ export default observer(function ActivityDashBoard() {
 
     useEffect(() => {
         if (activityRegistry.size <= 1) loadActivities();
-    }, [activityStore]);
+    }, [loadActivities, activityRegistry]);      
+   
 
     if (activityStore.loadingInitial) return <LoadingComponent content='Loading activities...' />
 

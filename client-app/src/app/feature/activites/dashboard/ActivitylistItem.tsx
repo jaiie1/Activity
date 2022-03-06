@@ -1,19 +1,20 @@
 import { format } from 'date-fns';
 import React from "react";
-import { act } from 'react-dom/test-utils';
 import { Link } from "react-router-dom";
-import { Button, Icon, Item, Label, Popup, Segment } from "semantic-ui-react";
+import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { Activity } from "../../../models/activity";
-import { Profile } from '../../../models/profile';
 import ActivityListItemAttendee from './ActivityListItemAttendee';
 
 interface Props {
-    activity: Activity
+    activity: Activity   
+    
 }
 
-export default function ActivityListItem({ activity }: Props) {
+export default function ActivityListItem({ activity}: Props) {   
 
+    console.log(activity.hostUsername);
     return (
+       
         <Segment.Group>
             <Segment>
                 {activity.isCancelled &&
@@ -31,7 +32,7 @@ export default function ActivityListItem({ activity }: Props) {
                             {activity.isHost && (
                                 <Item.Description>
                                     <Label basic color='orange'>
-                                        You are hosting this activity
+                                        
                                     </Label>
                                 </Item.Description>
                             )}

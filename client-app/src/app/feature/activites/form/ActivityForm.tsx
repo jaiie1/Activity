@@ -20,7 +20,7 @@ export default observer(function ActivityForm() {
     const history = useHistory();
     const { activityStore } = useStore();
     const { createActivity, updateActivity,
-        loading, loadActivity, loadingInitial } = activityStore;
+        loading, loadActivity, loadingInitial, } = activityStore;
 
     const { id } = useParams<{ id: string }>();
 
