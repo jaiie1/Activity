@@ -44,7 +44,9 @@ axios.interceptors.response.use(async response => {
                     }
                 }
                 throw modalStateErrors.flat();                
-            } 
+            } else {
+                toast.error(data);
+            }
             break;
         case 401: 
             toast.error("You are not authorized");
@@ -64,43 +66,48 @@ axios.interceptors.response.use(async response => {
 
 const responseBody = <T> (response: AxiosResponse<T>) => response.data;
 
-const request = {
-    get: <T> (url: string) => axios.get<T>(url).then(responseBody),
-    post: <T> (url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
-    put: <T> (url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
-    del: <T> (url: string) => axios.delete<T>(url).then(responseBody)
+const requests = {
+    get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+    post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
+    put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+    del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 }
 
 
 const Activities = {
-    list: () => request.get<Activity[]>("/activities"),
-    details: (id: string) => request.get<Activity>(`/activities/${id}`),
-    create: (activity: ActivityFormValues) => request.post<void>("/activities", activity),
-    update: (activity: ActivityFormValues) => request.put<void>(`/activities/${activity.id}`, activity),
-    delete: (id: string) => request.del<void>(`/activities/${id}`),
-    attend: (id: string) => request.post<void>(`/activities/${id}/attend`, {}) 
+    list: () => requests.get<Activity[]>(`/activities`),
+    details: (id: string) => requests.get<Activity>(`/activities/${id}`),
+    create: (activity: ActivityFormValues) => requests.post<void>('/activities', activity),
+    update: (activity: ActivityFormValues) => requests.put<void>(`/activities/${activity.id}`, activity),
+    delete: (id: string) => requests.del<void>(`/activities/${id}`),
+    attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}) 
 }
 
 const Account = {
-    current: () => request.get<User>("/account"),
-    login: (user: UserFomValues) => request.post<User>("/account/login", user),
-    register: (user: UserFomValues) => request.post<User>("/account/register", user)
+    current: () => requests.get<User>('/account'),
+    login: (user: UserFomValues) => requests.post<User>('/account/login', user),
+    register: (user: UserFomValues) => requests.post<User>('/account/register', user)
 }
 
-const Profiles = {    
-    get: (username: string) => request.get<Profile>(`/profiles/${username}`),
+const Profiles = {
+    get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
     uploadPhoto: (file: Blob) => {
         let formData = new FormData();
-        formData.append('file', file);
+        formData.append('File', file);
         return axios.post<Photo>('photos', formData, {
             headers: { 'Content-type': 'multipart/form-data' }
         })
     },
-    setMainPhoto: (id: string) => request.post(`/photos/${id}/setMain`, {}),
-    deletePhoto: (id: string) => request.del(`/photos/${id}`),
-    updateProfile: (profile: Partial<Profile>) => request.put(`/profiles`, profile)
-
-        
+    setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
+    deletePhoto: (id: string) => requests.del(`/photos/${id}`),
+    updateProfile: (profile: Partial<Profile>) => requests.put(`/profiles`, profile),
+    updateFollowing: (username: string) => requests.post(`/follow/${username}`, {}),
+    listFollowings: (username: string, predicate: string) =>
+        requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
+    // listActivities: (username: string, predicate: string) =>
+    //     requests.get<UserActivity[]>(`/profiles/${username}/activities?predicate=${predicate}`)
+         
+    
 }
 
 const agent = {

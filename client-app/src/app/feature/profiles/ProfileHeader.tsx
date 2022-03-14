@@ -25,8 +25,8 @@ export default observer(function ProfileHeader({ profile }: Props ){
                 </Grid.Column>
                 <Grid.Column width={4}>
                     <Statistic.Group widths={2}>
-                        <Statistic label='followers' value='5' />
-                        <Statistic label='following' value='32' />
+                        <Statistic label='followers' value={profile.followersCount} />
+                        <Statistic label='following' value={profile.followingCount} />
                     </Statistic.Group>
                     <Divider />
                     <Reveal animated='move'>
