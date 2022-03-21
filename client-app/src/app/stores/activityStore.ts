@@ -2,8 +2,10 @@ import { format } from "date-fns";
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Activity, ActivityFormValues } from "../models/activity";
+import { Pagination, PagingParams } from "../models/pagination";
 import { Profile } from "../models/profile";
 import { store } from "./store";
+
 
 export default class ActivityStore {
     activityRegistry = new Map<string, Activity>();
@@ -11,10 +13,22 @@ export default class ActivityStore {
     editMode = false;
     loading = false;
     loadingInitial = false;
-
+    pagination: Pagination | null = null;
+    pagingParams = new PagingParams();
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setPagingParams(params: PagingParams) {
+        this.pagingParams = params;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+        return params;
     }
 
     get activitiesByDate() {
@@ -35,18 +49,21 @@ export default class ActivityStore {
     loadActivities = async () => {
         this.loadingInitial = true;
         try {
-            const activities = await agent.Activities.list();
-            activities.forEach(activity => {
+            const result = await agent.Activities.list(this.axiosParams);
+            result.data.forEach((activity: Activity) => {
                 this.setActivity(activity);
             })
+            this.setPagination(result.pagination);
             this.setLoadingInital(false)
-
-
         } catch (error) {
             console.log(error);
             this.setLoadingInital(false)
         }
 
+    }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
     }
 
     loadActivity = async (id: string) => {
@@ -62,12 +79,11 @@ export default class ActivityStore {
                 runInAction(() => {
                     this.selectedActivity = activity;
                 })
-                this.loadingInitial = false;
+                this.setLoadingInital(false);
                 return activity;
-
             } catch (error) {
                 console.log(error);
-                this.loadingInitial = false;
+                this.setLoadingInital(false);
             }
         }
     }
@@ -80,11 +96,10 @@ export default class ActivityStore {
             activity.isGoing = activity.attendees!.some(
                 a => a.username === user.username
             )
-
             activity.isHost = activity.hostUsername === user.username;
-            activity.host = activity.attendees?.find(x => x.username === activity.hostUsername)
+            activity.host = activity.attendees?.find(x => x.username === activity.hostUsername);
         }
-        activity.date = new Date(activity.date!)
+        activity.date = new Date(activity.date!);
         this.activityRegistry.set(activity.id, activity);
     }
 

@@ -13,24 +13,23 @@ export interface Activity {
     isGoing: boolean;
     isHost: boolean;
     host?: Profile;
-    attendees: Profile[];
+    attendees: Profile[]
 }
 
 export class Activity implements Activity {
-    constructor(init?: ActivityFormValues){
-        Object.assign(this, init)
-    }       
+    constructor(init?: ActivityFormValues) {
+        Object.assign(this, init);
+    }
 }
 
-export class ActivityFormValues
-{
+export class ActivityFormValues {
     id?: string = undefined;
     title: string = '';
     category: string = '';
     description: string = '';
-    date: Date | null = null    
+    date: Date | null = null;
     city: string = '';
-    venue: string = '';     
+    venue: string = '';
 
     constructor(activity?: ActivityFormValues) {
         if (activity) {
@@ -39,11 +38,10 @@ export class ActivityFormValues
             this.category = activity.category;
             this.description = activity.description;
             this.date = activity.date;
-            this.city = activity.city;
             this.venue = activity.venue;
-        }        
+            this.city = activity.city;
+        }
     }
-
-
 }
+
 
