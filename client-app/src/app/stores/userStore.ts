@@ -38,11 +38,12 @@ export default class UserStore {
     }
 
     getUser = async () => {
-        try{
+        try {
             const user = await agent.Account.current();
-            runInAction(() => this.user = user);
-        } catch(error){
-            console.log(error)
+            store.commonStore.setToken(user.token);
+            runInAction(() => this.user = user);           
+        } catch (error) {
+            console.log(error);
         }
     }
 
