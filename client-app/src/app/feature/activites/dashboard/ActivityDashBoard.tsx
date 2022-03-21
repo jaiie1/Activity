@@ -7,6 +7,7 @@ import ActivityList from "./ActivityList";
 import ActivityFilters from "./ActivityFilters";
 import { PagingParams } from "../../../models/pagination";
 import InfiniteScroll from 'react-infinite-scroller';
+import ActivityListItemPlaceholder from "./ActivityListItemPlaceholder";
 
 
 export default observer(function ActivityDashBoard() {
@@ -17,32 +18,38 @@ export default observer(function ActivityDashBoard() {
     function handleGetNext() {
         setLoadingNext(true);
         setPagingParams(new PagingParams(pagination!.currentPage + 1));
-        loadActivities().then(() => setLoadingNext(false));        
+        loadActivities().then(() => setLoadingNext(false));
     }
 
     useEffect(() => {
         if (activityRegistry.size <= 1) loadActivities();
-    }, [loadActivities, activityRegistry]);      
-   
-
-    if (activityStore.loadingInitial && !LoadingNext ) return <LoadingComponent content='Loading activities...' />
+    }, [loadActivities, activityRegistry]);
 
 
     return (
         <Grid>
             <Grid.Column width='10'>
-                <InfiniteScroll
-                pageStart={0}
-                loadMore={handleGetNext}
-                hasMore={!LoadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
-                initialLoad={false}
-                >
-                      <ActivityList />
-                </InfiniteScroll>
-                            
+                {activityStore.loadingInitial && !LoadingNext ? (
+                    <>
+                        <ActivityListItemPlaceholder />
+                        <ActivityListItemPlaceholder />
+                    </>
+                ) : (
+                    <InfiniteScroll
+                        pageStart={0}
+                        loadMore={handleGetNext}
+                        hasMore={!LoadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
+                        initialLoad={false}
+                    >
+                        <ActivityList />
+                    </InfiniteScroll>
+
+                )}
+
+
             </Grid.Column>
             <Grid.Column width='6'>
-                <ActivityFilters />              
+                <ActivityFilters />
             </Grid.Column>
             <Grid.Column width='10'>
                 <Loader activity={LoadingNext} />
