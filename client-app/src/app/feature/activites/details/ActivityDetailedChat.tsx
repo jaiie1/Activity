@@ -74,7 +74,7 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                         <Comment key={comment.id}>
                             <Comment.Avatar src={comment.image || '/assets/user.png'} />
                             <Comment.Content>
-                                <Comment.Author as={Link} to={`/profiles/${comment.username}`}>
+                                <Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
                                     {comment.displayName}
                                 </Comment.Author>
                                 <Comment.Metadata>

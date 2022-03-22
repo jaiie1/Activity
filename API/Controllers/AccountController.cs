@@ -56,16 +56,16 @@ namespace API.Controllers
                 ModelState.AddModelError("email", "Email taken");
                 return ValidationProblem(ModelState);
             }
-            if(await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
+            if(await _userManager.Users.AnyAsync(x => x.UserName == registerDto.userName))
             {
-                ModelState.AddModelError("username", "Username taken");
+                ModelState.AddModelError("userName", "Username taken");
                 return ValidationProblem(ModelState);
             }
             var user = new AppUser
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.Username
+                UserName = registerDto.userName
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -86,6 +86,8 @@ namespace API.Controllers
             var user = await _userManager.Users.Include(p => p.Photos)
                 .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
+            if(user == null) return null;
+
             return CreateUserObject(user);
         }
 
@@ -96,8 +98,10 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
                 Token = _tokenServices.CreateToken(user),
-                UserName = user.UserName
+                userName = user.UserName
             };
+
+            
         }
 
 

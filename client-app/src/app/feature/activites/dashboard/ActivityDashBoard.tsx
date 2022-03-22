@@ -10,9 +10,11 @@ import ActivityListItemPlaceholder from "./ActivityListItemPlaceholder";
 
 
 export default observer(function ActivityDashBoard() {
-    const { activityStore } = useStore();
+    const { activityStore} = useStore();
     const { loadActivities, activityRegistry, setPagingParams, pagination } = activityStore;
     const [LoadingNext, setLoadingNext] = useState(false);
+
+    
 
     function handleGetNext() {
         setLoadingNext(true);

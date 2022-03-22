@@ -96,7 +96,7 @@ const Account = {
 }
 
 const Profiles = {
-    get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+    get: (userName: string) => requests.get<Profile>(`/profiles/${userName}`),
     uploadPhoto: (file: Blob) => {
         let formData = new FormData();
         formData.append('File', file);
@@ -107,11 +107,11 @@ const Profiles = {
     setMainPhoto: (id: string) => requests.post(`/photos/${id}/setMain`, {}),
     deletePhoto: (id: string) => requests.del(`/photos/${id}`),
     updateProfile: (profile: Partial<Profile>) => requests.put(`/profiles`, profile),
-    updateFollowing: (username: string) => requests.post(`/follow/${username}`, {}),
-    listFollowings: (username: string, predicate: string) =>
-        requests.get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
-    listActivities: (username: string, predicate: string) =>
-        requests.get<UserActivity[]>(`/profiles/${username}/activities?predicate=${predicate}`)
+    updateFollowing: (userName: string) => requests.post(`/follow/${userName}`, {}),
+    listFollowings: (userName: string, predicate: string) =>
+        requests.get<Profile[]>(`/follow/${userName}?predicate=${predicate}`),
+    listActivities: (userName: string, predicate: string) =>
+        requests.get<UserActivity[]>(`/profiles/${userName}/activities?predicate=${predicate}`)
 }
 
 const agent = {

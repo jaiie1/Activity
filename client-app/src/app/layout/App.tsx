@@ -48,7 +48,7 @@ function App() {
               <PrivateRoute exact path='/activities' component={ActivityDashBoard} />
                 <PrivateRoute path='/activities/:id' component={ActivityDetails} />
                 <PrivateRoute key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
-                <PrivateRoute path='/profiles/:username' component={ProfilePage} />
+                <PrivateRoute path='/profiles/:userName' component={ProfilePage} />
                 <PrivateRoute path='/errors' component={TestErrors} />
                 <Route path='/server-error' component={ServerError} />            
                 <Route component={NotFound} />

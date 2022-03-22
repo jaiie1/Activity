@@ -6,13 +6,10 @@ import { Activity } from "../../../models/activity";
 import ActivityListItemAttendee from './ActivityListItemAttendee';
 
 interface Props {
-    activity: Activity   
-    
+    activity: Activity       
 }
 
-export default function ActivityListItem({ activity}: Props) {   
-
-    console.log(activity.hostUsername);
+export default function ActivityListItem({ activity}: Props) {       
     return (
        
         <Segment.Group>

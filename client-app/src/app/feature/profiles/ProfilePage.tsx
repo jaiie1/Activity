@@ -9,17 +9,17 @@ import ProfileContent from './ProfileContent';
 import ProfileHeader from './ProfileHeader';
 
 export default observer(function ProfilePage() {
-    const { username } = useParams<{ username: string }>();
+    const { userName } = useParams<{ userName: string }>();
     const { profileStore } = useStore();
     const { loadingProfile, loadProfile, profile, setActiveTab} = profileStore;
 
     
     useEffect(() => {
-        loadProfile(username);
+        loadProfile(userName);
         return () => {
             setActiveTab(0);
         }
-    }, [username, loadProfile, setActiveTab]);  
+    }, [userName, loadProfile, setActiveTab]);  
 
    
 
