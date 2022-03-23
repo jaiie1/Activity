@@ -36,7 +36,7 @@ export default class ProfileStore {
 
     get isCurrentUser() {
         if (store.userStore.user && this.profile) {
-            return store.userStore.user.userName === this.profile.username;
+            return store.userStore.user.username === this.profile.username;
         }
         return false;
     }
@@ -138,11 +138,11 @@ export default class ProfileStore {
             await agent.Profiles.updateFollowing(userName);
             store.activityStore.updateAttendeeFollowing(userName);
             runInAction(() => {
-                if (this.profile && this.profile.username !== store.userStore.user?.userName && this.profile.username === userName) {
+                if (this.profile && this.profile.username !== store.userStore.user?.username && this.profile.username === userName) {
                     following ? this.profile.followersCount++ : this.profile.followersCount--;
                     this.profile.following = !this.profile.following;
                 }
-                if (this.profile && this.profile.username === store.userStore.user?.userName) {
+                if (this.profile && this.profile.username === store.userStore.user?.username) {
                     following ? this.profile.followingCount++ : this.profile.followingCount--;
                 }
                 this.followings.forEach(profile => {

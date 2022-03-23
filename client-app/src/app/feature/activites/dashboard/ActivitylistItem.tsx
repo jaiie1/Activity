@@ -29,7 +29,7 @@ export default function ActivityListItem({ activity}: Props) {
                             {activity.isHost && (
                                 <Item.Description>
                                     <Label basic color='orange'>
-                                        
+                                    You are hosting this activity
                                     </Label>
                                 </Item.Description>
                             )}

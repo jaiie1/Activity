@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Segment, Header, Comment, Loader } from 'semantic-ui-react'
+
 import * as Yup from 'yup';
 import { formatDistanceToNow } from 'date-fns'
 import { useStore } from '../../../stores/store'
@@ -74,7 +75,7 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                         <Comment key={comment.id}>
                             <Comment.Avatar src={comment.image || '/assets/user.png'} />
                             <Comment.Content>
-                                <Comment.Author as={Link} to={`/profiles/${comment.userName}`}>
+                                <Comment.Author as={Link} to={`/profiles/${comment.username}`}>
                                     {comment.displayName}
                                 </Comment.Author>
                                 <Comment.Metadata>
