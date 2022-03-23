@@ -44,7 +44,7 @@ namespace API.Controllers
                 return CreateUserObject(user);
             }
 
-            return Unauthorized();
+            return Unauthorized("Invalid Email or Password");
         }
 
 
@@ -56,7 +56,7 @@ namespace API.Controllers
                 ModelState.AddModelError("email", "Email taken");
                 return ValidationProblem(ModelState);
             }
-            if(await _userManager.Users.AnyAsync(x => x.UserName == registerDto.userName))
+            if(await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
             {
                 ModelState.AddModelError("userName", "Username taken");
                 return ValidationProblem(ModelState);
@@ -65,7 +65,7 @@ namespace API.Controllers
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                UserName = registerDto.userName
+                UserName = registerDto.Username
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
@@ -98,7 +98,7 @@ namespace API.Controllers
                 DisplayName = user.DisplayName,
                 Image = user?.Photos?.FirstOrDefault(x => x.IsMain)?.Url,
                 Token = _tokenServices.CreateToken(user),
-                userName = user.UserName
+                Username = user.UserName
             };
 
             
