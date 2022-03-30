@@ -23,8 +23,12 @@ interface Props {
     activity: Activity
 }
 
+
+
 export default observer(function ActivityDetailedHeader({ activity }: Props) {
     const { activityStore: { updateAttendance, loading, cancelActivityToggle } } = useStore();
+
+    console.log("activity Id header: " + activity.id);
     return (
         <Segment.Group>
             <Segment basic attached='top' style={{ padding: '0' }}>

@@ -12,15 +12,16 @@ export default class CommentStore {
     }
 
     createHubConnection = (activityId: string) => {
-        if (store.activityStore.selectedActivity) {
+        if (store.activityStore.selectedActivity) {         
             this.hubConnection = new HubConnectionBuilder()
-                .withUrl(process.env.REACT_APP_CHAT_URL + '?activityId=' + activityId, {
-                    accessTokenFactory: () => store.userStore.user?.token!
+                .withUrl('http://localhost:5000/chat?activityId=' + activityId, {                    
+                    accessTokenFactory: () => store.userStore.user?.token!                   
                 })
                 .withAutomaticReconnect()
                 .configureLogging(LogLevel.Information)
-                .build();
-
+                .build();            
+           
+            console.log("activitycommment store:  " + activityId);       
             this.hubConnection.start().catch(error => console.log('Error establishing the connection: ', error));
 
             this.hubConnection.on('LoadComments', (comments: ChatComment[]) => {

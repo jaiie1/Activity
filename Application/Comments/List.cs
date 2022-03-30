@@ -14,7 +14,7 @@ namespace Application.Comments
 {
     public class List
     {
-        public class Query : IRequest<Result<List<CommentDto>>> 
+        public class Query : IRequest<Result<List<CommentDto>>>
         {
             public Guid ActivityId { get; set; }
         }
@@ -23,7 +23,6 @@ namespace Application.Comments
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-
             public Handler(DataContext context, IMapper mapper)
             {
                 _mapper = mapper;
@@ -35,16 +34,16 @@ namespace Application.Comments
             public async Task<Result<List<CommentDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var comment = await _context.Comments
-                .Where(x => x.Activity.Id == request.ActivityId)
-                .OrderBy(x => x.CreateAt)
-                .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+                    .Where(x => x.Activity.Id == request.ActivityId)
+                    .OrderBy(x => x.CreateAt)
+                    .ProjectTo<CommentDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
 
-                return Result<List<CommentDto>>.Success(comment);   
+                return Result<List<CommentDto>>.Success(comment);
 
-                
+
             }
-           
+
         }
 
     }
