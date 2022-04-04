@@ -17,6 +17,8 @@ import ModalContainer from '../common/modals/ModalContainer';
 import ProfilePage from '../feature/profiles/ProfilePage';
 import PrivateRoute from './PrivateRoute';
 import TestErrors from '../feature/errors/TestError';
+import RegisterSuccess from '../feature/users/RegisterSuccess';
+import ConfirmEmail from '../feature/users/ConfirmEmail';
 
 function App() {
   const location = useLocation();
@@ -50,10 +52,11 @@ function App() {
                 <PrivateRoute key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
                 <PrivateRoute path='/profiles/:userName' component={ProfilePage} />
                 <PrivateRoute path='/errors' component={TestErrors} />
-                <Route path='/server-error' component={ServerError} />            
+                <Route path='/server-error' component={ServerError} />
+                <Route path='/account/registerSuccess' component={RegisterSuccess} />
+                <Route path='/account/verifyEmail' component={ConfirmEmail} />            
                 <Route component={NotFound} />
               </Switch>
-              
             </Container>
           </>
         )}

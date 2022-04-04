@@ -10,6 +10,7 @@ using System.Text;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
+using System;
 
 namespace API.Extenstions
 {
@@ -19,14 +20,14 @@ namespace API.Extenstions
         IConfiguration configuration)
         {
             services.AddIdentityCore<AppUser>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 4;
+            {               
                 options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
+                options.SignIn.RequireConfirmedEmail = true;
+                
             })            
             .AddEntityFrameworkStores<DataContext>()
-            .AddSignInManager<SignInManager<AppUser>>();
+            .AddSignInManager<SignInManager<AppUser>>()
+            .AddDefaultTokenProviders();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
 
@@ -38,7 +39,9 @@ namespace API.Extenstions
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = key,
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
                     };
 
                     options.Events = new JwtBearerEvents

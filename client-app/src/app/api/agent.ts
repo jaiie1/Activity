@@ -30,46 +30,49 @@ axios.interceptors.response.use(async (response) => {
         return response as AxiosResponse<PaginatedResult<any>>
     }
     return response;
-     
+
 }, (error: AxiosError) => {
-    const {data, status, config} = error.response!;
+    const { data, status, config, headers } = error.response!;
     switch (status) {
-        case 400: 
-            if(typeof data === 'string') {
+        case 400:
+            if (typeof data === 'string') {
                 toast.error(data);
             }
-            if(config.method === 'get' && data.errors.hasOwnProperty('id')){
+            if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
                 history.push('/not-found');
             }
-            if(data.errors) {
+            if (data.errors) {
                 const modalStateErrors = [];
                 for (const key in data.errors) {
-                    if(data.errors[key]) {
+                    if (data.errors[key]) {
                         modalStateErrors.push(data.errors[key]);
                     }
                 }
-                throw modalStateErrors.flat();                
+                throw modalStateErrors.flat();
             } else {
                 toast.error(data);
             }
             break;
-        case 401: 
-            toast.error("You are not authorized");
+        case 401:
+            if (status === 401 && headers['www-authenticate']?.startsWith('Bearer error="invalid_token"')) {
+                store.userStore.logout();
+                toast.error('Session expired - please login again');
+            }
             break;
-        case 404: 
+        case 404:
             history.push('/not-found');
             break;
-        case 500: 
+        case 500:
             store.commonStore.setServerError(data);
             history.push('/server-error');
-            break;            
-    }   
+            break;
+    }
 
-    return Promise.reject(error);    
+    return Promise.reject(error);
 })
 
 
-const responseBody = <T> (response: AxiosResponse<T>) => response.data;
+const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
 const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),
@@ -80,19 +83,24 @@ const requests = {
 
 
 const Activities = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Activity[]>>('/activities', {params})
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Activity[]>>('/activities', { params })
         .then(responseBody),
     details: (id: string) => requests.get<Activity>(`/activities/${id}`),
     create: (activity: ActivityFormValues) => requests.post<void>('/activities', activity),
     update: (activity: ActivityFormValues) => requests.put<void>(`/activities/${activity.id}`, activity),
     delete: (id: string) => requests.del<void>(`/activities/${id}`),
-    attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}) 
+    attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {})
 }
 
 const Account = {
     current: () => requests.get<User>('/account'),
     login: (user: UserFomValues) => requests.post<User>('/account/login', user),
-    register: (user: UserFomValues) => requests.post<User>('/account/register', user)
+    register: (user: UserFomValues) => requests.post<User>('/account/register', user),
+    refreshToken: () => requests.post<User>('/account/refresh-token', {}),
+    verifyEmail: (token: string, email: string) => 
+        requests.post<void>(`/account/verifyEmail?token=${token}&email=${email}`, {}),
+    resendEmailConfirm: (email: string) => 
+        requests.get(`/account/resendEmailConfirmationLink?email=${email}`)
 }
 
 const Profiles = {

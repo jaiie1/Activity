@@ -3,6 +3,7 @@ using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
 using Infrastructure;
+using Infrastructure.Email;
 using Infrastructure.Photos;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ namespace API.Extenstions
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
+                    .WithExposedHeaders("WWW-Authenticate", "Pagination")
                     .WithOrigins("http://localhost:3000");
                 });
             });
@@ -40,6 +42,7 @@ namespace API.Extenstions
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.AddScoped<EmailSender>();
             services.Configure<CloudinartSettings>(config.GetSection("Cloudinary"));
             services.AddSignalR();
             
