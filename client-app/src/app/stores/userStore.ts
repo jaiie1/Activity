@@ -60,6 +60,16 @@ export default class UserStore {
         }
     }
 
+    forgotPassword = async (email: string) => {
+        try {
+            await agent.Account.forgotpassword(email);
+            history.push(`/account/forgotPasswordSuccess?email=${email}`);
+            store.modelStore.closeModel();
+        } catch (error) {
+            throw error;
+        }
+    }
+
     setImage = (image: string) => {
         if(this.user) this.user.image = image;
     }

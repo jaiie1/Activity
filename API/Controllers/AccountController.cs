@@ -166,6 +166,27 @@ namespace API.Controllers
 
         }
 
+
+        [AllowAnonymous]
+        [HttpGet("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            var origin = Request.Headers["origin"];
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null) return Unauthorized();
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+            var resetUrl = $"{origin}/account/resetPassword?token={token}&email={email}";
+            var message = $"<p>Please click the below link to reset your password:</p><p><a href='{resetUrl}'>Click to reset password</a></p>";
+
+            await _emailSender.SendEmailAsync(user.Email, "Please reset your password", message);
+
+            return Ok("Password reset link sent");
+        }
+
         private async Task SetRefreshToken(AppUser appUser)
         {
             var token = _tokenServices.GenerateRefreshToken();
@@ -193,6 +214,8 @@ namespace API.Controllers
                 Username = user.UserName
             };
         }
+
+
 
 
     }
