@@ -40,9 +40,10 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Email == loginDto.Email);
+            var user = await _userManager.Users.Include(p => p.Photos)
+                .FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
-            if (user == null) return Unauthorized("Invalid Email");
+            if (user == null) return Unauthorized("Invalid email");
 
             if (user.UserName == "bob") user.EmailConfirmed = true;
 
@@ -56,7 +57,7 @@ namespace API.Controllers
                 return CreateUserObject(user);
             }
 
-            return Unauthorized("Invalid Password");
+            return Unauthorized("Invalid password");
         }
 
         [AllowAnonymous]
@@ -84,7 +85,7 @@ namespace API.Controllers
 
             if (!result.Succeeded) return BadRequest("problem register user");
 
-            var origin = Request.Headers["Origin"];
+            var origin = Request.Headers["origin"];
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
