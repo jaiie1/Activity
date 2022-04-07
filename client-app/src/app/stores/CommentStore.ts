@@ -59,4 +59,13 @@ export default class CommentStore {
             console.log(error);
         }
     }
+
+
+    deleteComment = async (commentId: number) => {
+        try {
+            await this.hubConnection?.invoke('DeleteComment', commentId);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }

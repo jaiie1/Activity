@@ -1,23 +1,23 @@
 body{
-  background-color: #EAEAEA !important;
+  background-color: #20093d !important;
 }
 
 
 .ui.inverted.top.fixed.menu{
-  background-image: linear-gradient(135deg, rgb(24,42,155) 0%, rgb(33, 138, 174) 69%, rgb(32,167,172) 89%)!important;
+  background-image: linear-gradient(135deg, rgb(3, 9, 36) 0%, rgb(108, 174, 196) 69%, rgb(52, 18, 75) 89%)!important;
 }
 
 .react-calendar {
  width: 100% !important;
  border: none;
- box-shadow: 1px 2px 5px 0px rgba(34,36,38,.15);
+ box-shadow: 1px 2px 5px 0px rgba(14, 15, 15, 0.15);
 
 }
 
 .react-datepicker-wrapper {
   width: 100%;
   border: none;
-  box-shadow: 1px 2px 5px 0px rgba(34,36,38,.15);  
+  box-shadow: 1px 2px 5px 0px rgba(19, 18, 18, 0.15);  
 }
 
 .masthead {
@@ -25,9 +25,9 @@ body{
   align-items: center;
   background-image: linear-gradient(
           135deg,
-          rgb(24, 42, 115) 0%,
-          rgb(33, 138, 174) 69%,
-          rgb(32, 167, 172) 89%
+          rgb(3, 9, 36) 0%,
+          rgb(108, 174, 196) 69%,
+          rgb(52, 18, 75) 89%
   ) !important;
   height: 100vh;
 }
