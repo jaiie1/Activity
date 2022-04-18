@@ -189,18 +189,6 @@ export default class ProfileStore {
         }
     }
 
-    deleteAccount = async () => {
-        this.loading = true;
-        try {
-            await agent.Profiles.deleteAccount();
-            runInAction(() => {
-                this.loading = false;
-                store.userStore.logout();
-            })
-        } catch (error) {
-            console.log(error);
-            runInAction(() => this.loading = false);
-        }
-    }
+    
 }
 

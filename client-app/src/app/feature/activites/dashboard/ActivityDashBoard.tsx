@@ -7,6 +7,7 @@ import ActivityFilters from "./ActivityFilters";
 import { PagingParams } from "../../../models/pagination";
 import InfiniteScroll from 'react-infinite-scroller';
 import ActivityListItemPlaceholder from "./ActivityListItemPlaceholder";
+import { toast } from "react-toastify";
 
 
 export default observer(function ActivityDashBoard() {
@@ -26,6 +27,7 @@ export default observer(function ActivityDashBoard() {
         if (activityRegistry.size <= 1) loadActivities();
     }, [loadActivities, activityRegistry]);
 
+  
 
     return (
         <Grid>

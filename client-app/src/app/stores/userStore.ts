@@ -61,14 +61,24 @@ export default class UserStore {
     }
 
     forgotPassword = async (email: string) => {
+        console.log("asd");
         try {
-            await agent.Account.forgotpassword(email);
-            history.push(`/account/forgotPasswordSuccess?email=${email}`);
+            await agent.Account.forgotPassword(email);                
             store.modelStore.closeModel();
         } catch (error) {
             throw error;
         }
     }
+
+    // forgotpassreset = async (creds: UserFomValues) => {
+    //     try {
+    //         await agent.Account.forgotpassreset(creds);
+    //         history.push(`/account/forgotPasswordSuccess?email=${creds.email}`);
+    //         store.modelStore.closeModel();
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // }
 
     setImage = (image: string) => {
         if(this.user) this.user.image = image;

@@ -22,8 +22,7 @@ axios.interceptors.request.use((config: any) => {
     return config;
 })
 
-axios.interceptors.response.use(async (response) => {
-    await sleep(1000);
+axios.interceptors.response.use(async (response) => {    
     const pagination = response.headers['pagination'];
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -102,7 +101,8 @@ const Account = {
     resendEmailConfirm: (email: string) => 
         requests.get(`/account/resendEmailConfirmationLink?email=${email}`),
     changePassword: (password: string) => requests.post<void>(`/account/changePassword`, { password }),
-    forgotpassword: (email: string) => requests.post<void>(`/account/forgotPassword`, { email }),
+    forgotPassword: (email: string) => requests.get<void>(`/account/forgotpassword?email=${email}`),
+    
 }
 
 const Profiles = {

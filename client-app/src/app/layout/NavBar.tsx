@@ -6,6 +6,8 @@ import { useStore } from '../stores/store';
 
 export default observer(function NavBar() {
     const { userStore: { user, logout, isLoggedIn } } = useStore();
+    const {profileStore} = useStore();
+    const {isCurrentUser} = profileStore;
     return (
         <Menu inverted fixed='top'>
             <Container>
@@ -16,7 +18,9 @@ export default observer(function NavBar() {
                 {isLoggedIn &&
                 <>
                 <Menu.Item as={NavLink} to='/activities' name='Activities' />
-                <Menu.Item as={NavLink} to='/admin' name='Admin' />
+                {isCurrentUser && (
+                       <Menu.Item as={NavLink} to='/admin' name='Admin' />
+                    )}               
                 {/* <Menu.Item as={NavLink} to='/errors' name='Errors' /> */}
                 <Menu.Item>
                     <Button as={NavLink} to='/createActivity' positive content='Create Activity' />

@@ -18,45 +18,34 @@ namespace Application.Profiles
         {
             public string Username { get; set; }
         }
-
+        
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-            private readonly IMapper _mapper;
-            public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
-                _mapper = mapper;
                 _userAccessor = userAccessor;
                 _context = context;
-
             }
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users
-                    .ProjectTo<Profile>(_mapper.ConfigurationProvider,
-                        new { currentUsername = _userAccessor.GetUsername() })
-                    .SingleOrDefaultAsync(x => x.Username == request.Username);
+                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
 
-                if (user == null) return null;
+                if(user == null) return Result<Unit>.Failure("User not found");             
 
+                _context.Remove(user);
 
-                var currentUser = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
-
-                if (currentUser == null) return null;
-
-
-                if (currentUser.UserName == user.Username) return null;
-                
-                
-
-                var success = await _context.SaveChangesAsync() > 0;               
+                var success = await _context.SaveChangesAsync() > 0;
 
                 if (success) return Result<Unit>.Success(Unit.Value);
 
-                return Result<Unit>.Failure("Problem updating profile");
+                return Result<Unit>.Failure("Problem saving changes");
+             
             }
         }
+        
+        
     }
 }

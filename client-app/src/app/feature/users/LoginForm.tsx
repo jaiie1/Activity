@@ -4,6 +4,7 @@ import { Button, Header, Label } from 'semantic-ui-react';
 import MyTextInput from '../../common/form/MyTextInput';
 import { useStore } from '../../stores/store';
 import RegisterForm from "../users/RegisterForm";
+import ForgotPasswordForm from './ForgotPasswordForm';
 
 export default function LoginForm() {
     const { modelStore, userStore } = useStore();
@@ -21,16 +22,19 @@ export default function LoginForm() {
                     <ErrorMessage name='error' render={() =>
                         <Label style={{ marginBotton: 10 }} basic color='red' content={errors.error} />}
                     />
-                    <Button loding={isSubmitting} positive content='Login' type='login' fluid />
+                    <Button loading={isSubmitting} positive content='Login' type='login' fluid />
                     <Header as='h3' content='Saknar du konto?' color='teal' textAlign='center' />
                     <Button.Group>
                         <Button onClick={() => modelStore.openModal(<RegisterForm />)}
                             content='Register' type='register' fluid positive />
                         <Button.Or />
                         <Button onClick={() => modelStore.closeModel()} content='Bakåt'  color='blue' fluid />
+                       
                     </Button.Group>
-
+                    
+                    <Button onClick={() => modelStore.openModal(<ForgotPasswordForm />)} content='Återställ lösenord' type='forgotpassword' fluid />
                 </Form>
+                
             )}
 
         </Formik>

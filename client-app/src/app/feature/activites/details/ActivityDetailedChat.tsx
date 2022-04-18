@@ -1,36 +1,36 @@
 import { Formik, Form, Field, FieldProps } from 'formik'
 import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
-import { Link} from 'react-router-dom'
-import { Segment, Header, Comment, Loader } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
+import { Segment, Header, Comment, Loader, Button } from 'semantic-ui-react'
 import * as Yup from 'yup';
 import { formatDistanceToNow } from 'date-fns'
 import { useStore } from '../../../stores/store'
 
 interface Props {
-    activityId: string;    
+    activityId: string;
 }
 
 export default observer(function ActivityDetailedChat({ activityId }: Props) {
-    const { commentStore } = useStore();
-       
-    
+    const { commentStore } = useStore();   
+
+
 
     useEffect(() => {
         if (activityId) {
             commentStore.createHubConnection(activityId);
             console.log("activityId: " + activityId);
         }
-        if(activityId!  === "") {           
+        if (activityId! === "") {
             console.log("activityId is null");
         }
         return () => {
             commentStore.clearComments();
         }
-    }, [commentStore, activityId]);       
-    
-   
-    
+    }, [commentStore, activityId]);
+
+
+
     return (
         <>
             <Segment
@@ -89,11 +89,13 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                                     <div>{formatDistanceToNow(comment.createdAt)} ago</div>
                                 </Comment.Metadata>
                                 <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>{comment.body}</Comment.Text>
-                            </Comment.Content>
+                                                 
+                        </Comment.Content>                            
+                          
                         </Comment>
                     ))}
-                </Comment.Group>
-            </Segment>
+            </Comment.Group>
+        </Segment>
         </>
 
     )

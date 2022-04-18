@@ -1,4 +1,5 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
+import { ConsoleLogger } from "@microsoft/signalr/dist/esm/Utils";
 import { makeAutoObservable, runInAction } from "mobx";
 import { ChatComment } from "../models/comment";
 import { store } from "./store";
@@ -62,6 +63,20 @@ export default class CommentStore {
 
 
     deleteComment = async (commentId: number) => {
+        console.log(commentId);
+        try {
+            await this.hubConnection?.invoke('DeleteComment', commentId);
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    deleteCommentFromStore = (commentId: number) => {
+        this.comments = this.comments.filter(c => c.id !== commentId);
+    }
+
+    deleteCommentFromServer = async (commentId: number) => {
         try {
             await this.hubConnection?.invoke('DeleteComment', commentId);
         } catch (error) {

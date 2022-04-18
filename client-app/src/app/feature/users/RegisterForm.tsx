@@ -5,14 +5,13 @@ import MyTextInput from '../../common/form/MyTextInput';
 import { useStore } from '../../stores/store';
 import * as Yup from 'yup';
 import ValidationErrors from '../errors/ValidationErrors';
-import LoginForm from './LoginForm';
 
 
 export default function RegisterForm() {
     const { modelStore, userStore } = useStore();
     return (
         <Formik
-            initialValues={{ displayName: '', usernamne: '', email: '', password: '', error: null }}
+            initialValues={{ displayName: '', username: '', email: '', password: '', error: null }}
             onSubmit={(values, { setErrors }) => userStore.register(values).catch(error =>
                 setErrors({ error }))}
 
@@ -37,7 +36,7 @@ export default function RegisterForm() {
                     <MyTextInput name='email' placeholder='Email' />
                     <MyTextInput name='password' placeholder='Password' type='password' />
                     <ErrorMessage
-                        name='error' render={() =>
+                        name='error' render={() => 
                             <ValidationErrors errors={errors.error} />}
                     />
                     <Button disabled={!isValid || !dirty || isSubmitting}

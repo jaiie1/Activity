@@ -26,14 +26,12 @@ namespace API.Controllers
             { Username = username, Predicate = predicate }));
         }
 
-        //detlete profile
-        [HttpDelete]
-        public async Task<IActionResult> Delete(string username)
+        //delete profile
+        [HttpDelete("{username}")]
+        public async Task<IActionResult> DeleteProfile(string username)
         {
             return HandleResult(await Mediator.Send(new Delete.Command { Username = username }));
-        }
-
-           
+        }           
 
     }
 }
