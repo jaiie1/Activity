@@ -1,11 +1,12 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { Button, Header, Icon, Segment } from "semantic-ui-react";
+import { Button, Form, Header, Icon, Segment } from "semantic-ui-react";
 import agent from "../../api/agent";
+
 import useQuery from "../../common/util/hooks";
 
-export default function ForgotPasswordSuccess ()
-{
+
+export default function ForgotPasswordSuccess() {
     const email = useQuery().get('email') as string;
 
     function handleConfirmEmailResend() {
@@ -18,7 +19,7 @@ export default function ForgotPasswordSuccess ()
         <Segment placeholder textAlign='center'>
             <Header icon color='green'>
                 <Icon name='check'/>
-                Successfully registered!
+                Email sent
             </Header>
             <p>Please check your email (including junk email) for the verification email</p>
             {email &&
@@ -30,6 +31,6 @@ export default function ForgotPasswordSuccess ()
             }
         </Segment>
     )
-}
+};
 
-    
+

@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import { toast } from "react-toastify";
 import { history } from "../..";
 import agent from "../api/agent";
 import { User, UserFomValues } from "../models/user";
@@ -23,6 +24,7 @@ export default class UserStore {
             this.startRefreshTokenTimer(user);
             runInAction(() => this.user = user);
             history.push('/activities');
+            toast.success(user.displayName + ' Välkommen till Aktiviteter');
             store.modelStore.closeModel();
         }
         catch (error) {
@@ -36,7 +38,8 @@ export default class UserStore {
         store.commonStore.setToken(null);
         window.localStorage.removeItem('jwt');
         this.user = null;
-        history.push('/');
+        history.push('/')
+        toast.info('Du är utloggad');
     }
 
     getUser = async () => {
@@ -60,14 +63,23 @@ export default class UserStore {
         }
     }
 
-    forgotPassword = async (email: string) => {
-        console.log("asd");
+    forgotPassword = async (email: string) => {       
         try {
-            await agent.Account.forgotPassword(email);                
+            await agent.Account.forgotPassword(email);
+            toast.success('Ett mail har skickats till dig med instruktioner');            
             store.modelStore.closeModel();
         } catch (error) {
             throw error;
         }
+    }
+
+    changePassword = async (password: string) => {
+        try {
+            await agent.Account.changePassword(password);
+            store.modelStore.closeModel();
+        } catch (error) {
+            throw error;
+        }   
     }
 
     // forgotpassreset = async (creds: UserFomValues) => {

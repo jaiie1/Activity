@@ -164,28 +164,7 @@ namespace API.Controllers
 
             return CreateUserObject(user);
 
-        }
-
-
-        // [AllowAnonymous]
-        // [HttpGet("forgotPassword")]
-        // public async Task<IActionResult> ForgotPassword(string email)
-        // {
-        //     var origin = Request.Headers["origin"];
-        //     var user = await _userManager.FindByEmailAsync(email);
-
-        //     if (user == null) return Unauthorized();
-
-        //     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-        //     token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-
-        //     var resetUrl = $"{origin}/account/resetPassword?token={token}&email={email}";
-        //     var message = $"<p>Please click the below link to reset your password:</p><p><a href='{resetUrl}'>Click to reset password</a></p>";
-
-        //     await _emailSender.SendEmailAsync(user.Email, "Please reset your password", message);
-
-        //     return Ok("Password reset link sent");
-        // }
+        }       
 
         [AllowAnonymous]
         [HttpGet("forgotpassword")]
@@ -200,7 +179,7 @@ namespace API.Controllers
             token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
             var origin = Request.Headers["origin"];
-            var resetUrl = $"{origin}/account/forgotpassword?token={token}&email={user.Email}";
+            var resetUrl = $"{origin}/account/ForgotPasswordSuccess?token={token}&email={user.Email}";
             var message = $"<p>Please click the below link to reset your password:</p><p><a href='{resetUrl}'>Click to reset password</a></p>";
 
             await _emailSender.SendEmailAsync(user.Email, "Please reset your password", message);
@@ -209,6 +188,23 @@ namespace API.Controllers
 
              return Ok("Password reset link sent");
             
+        }
+
+        [AllowAnonymous]
+        [HttpPost("changepassword")]
+        public async Task<IActionResult> ChangePassword(string token, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null) return Unauthorized();
+
+            var decodedTokenBytes = WebEncoders.Base64UrlDecode(token);
+            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, "password");
+
+            if (!result.Succeeded) return BadRequest("Could not reset password");
+
+            return Ok("Password reset");
         }
 
 
@@ -239,9 +235,6 @@ namespace API.Controllers
                 Username = user.UserName
             };
         }
-
-
-
 
     }
 }
