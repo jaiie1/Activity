@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import Calendar from 'react-calendar';
 import { Dropdown, Header, Menu } from 'semantic-ui-react';
-import { Activity } from '../../../models/activity';
 import { useStore } from '../../../stores/store';
 
 

@@ -20,6 +20,7 @@ import RegisterSuccess from '../feature/users/RegisterSuccess';
 import ConfirmEmail from '../feature/users/ConfirmEmail';
 import ForgotPasswordForm from '../feature/users/ForgotPasswordForm';
 import ForgotPasswordSuccess from '../feature/users/ForgotPasswordSuccess';
+import ResetPassword from '../feature/users/ChangePassword';
 
 function App() {
   const location = useLocation();
@@ -57,7 +58,8 @@ function App() {
                 <Route path='/account/registerSuccess' component={RegisterSuccess} />
                 <Route path='/account/verifyEmail' component={ConfirmEmail} />
                 <Route path='/account/forgotPassword' component={ForgotPasswordForm} />
-                <Route path='/account/forgotPasswordConfirmation' component={ForgotPasswordSuccess} />'          
+                <Route path='/account/forgotPasswordConfirmation' component={ForgotPasswordSuccess}/> 
+                <Route path='/account/resetPassword' component={ResetPassword} />       
                 <Route component={NotFound} />
               </Switch>
             </Container>

@@ -155,7 +155,6 @@ namespace API.Controllers
             var user = await _userManager.Users.Include(p => p.RefreshTokens).Include(p => p.Photos)
                 .FirstOrDefaultAsync(x => x.UserName == User.FindFirstValue(ClaimTypes.Name));
 
-
             if (user == null) return Unauthorized();
 
             var oldToken = user.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
@@ -175,11 +174,10 @@ namespace API.Controllers
             if(user != null && await _userManager.IsEmailConfirmedAsync(user))
             {
                 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);                              
 
             var origin = Request.Headers["origin"];
-            var resetUrl = $"{origin}/account/ForgotPasswordSuccess?token={token}&email={user.Email}";
+            var resetUrl = $"{origin}/account/resetPassword?token={token}&email={user.Email}";
             var message = $"<p>Please click the below link to reset your password:</p><p><a href='{resetUrl}'>Click to reset password</a></p>";
 
             await _emailSender.SendEmailAsync(user.Email, "Please reset your password", message);
@@ -188,23 +186,24 @@ namespace API.Controllers
 
              return Ok("Password reset link sent");
             
-        }
+        }     
 
         [AllowAnonymous]
-        [HttpPost("changepassword")]
-        public async Task<IActionResult> ChangePassword(string token, string email)
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
 
-            if (user == null) return Unauthorized();
+            if (user == null) return BadRequest("Finner ingen anv�ndare");
 
-            var decodedTokenBytes = WebEncoders.Base64UrlDecode(token);
-            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
-            var result = await _userManager.ResetPasswordAsync(user, decodedToken, "password");
+            var newHashedpassword = _userManager.PasswordHasher.HashPassword(user, resetPasswordDto.Password);
+            user.PasswordHash = newHashedpassword;
 
-            if (!result.Succeeded) return BadRequest("Could not reset password");
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);    
 
-            return Ok("Password reset");
+            if (!result.Succeeded) return BadRequest("Hej");
+
+            return Ok("Password reset success");            
         }
 
 
@@ -219,7 +218,7 @@ namespace API.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7)
+                Expires = DateTime.UtcNow.AddDays(7),               
             };
 
             Response.Cookies.Append("refreshToken", token.Token, cookieOptions);

@@ -7,11 +7,11 @@ import { Photo, Profile, UserActivity } from "../models/profile";
 import { User, UserFomValues } from "../models/user";
 import { store } from "../stores/store";
 
-const sleep = (delay: number) => {
-    return new Promise(resolve => {
-        setTimeout(resolve, delay);
-    });
-}
+// const sleep = (delay: number) => {
+//     return new Promise(resolve => {
+//         setTimeout(resolve, delay);
+//     });
+// }
 
 
 axios.defaults.baseURL = "http://localhost:5000/api";
@@ -91,7 +91,7 @@ const Activities = {
     attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {})
 }
 
-const Account = {
+    const Account = {
     current: () => requests.get<User>('/account'),
     login: (user: UserFomValues) => requests.post<User>('/account/login', user),
     register: (user: UserFomValues) => requests.post<User>('/account/register', user),
@@ -100,7 +100,10 @@ const Account = {
         requests.post<void>(`/account/verifyEmail?token=${token}&email=${email}`, {}),
     resendEmailConfirm: (email: string) => 
         requests.get(`/account/resendEmailConfirmationLink?email=${email}`),
-    changePassword: (password: string) => requests.post<void>(`/account/changePassword`, { password }),
+        changePassword: (password: string) => requests.post<void>(`/account/changePassword`, { password }),
+        changePasswordConfirm: (password: string, token: string, email: string) => 
+        requests.post<void>(`/account/resetPassword?password=${password}&token=${token}&email=${email}`, {}),
+
     forgotPassword: (email: string) => requests.get<void>(`/account/forgotpassword?email=${email}`),
     
 }

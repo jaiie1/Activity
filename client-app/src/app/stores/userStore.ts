@@ -73,14 +73,17 @@ export default class UserStore {
         }
     }
 
-    changePassword = async (password: string) => {
+    changePassword = async (password: string, token: string, email: string) => {
         try {
-            await agent.Account.changePassword(password);
-            store.modelStore.closeModel();
+            await agent.Account.changePasswordConfirm(password, token, email);            
+            history.push('/')          
+            toast.info('Ändrat lösenord är klart');
         } catch (error) {
             throw error;
-        }   
+        }
     }
+
+    
 
     // forgotpassreset = async (creds: UserFomValues) => {
     //     try {
