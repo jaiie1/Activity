@@ -4,7 +4,7 @@ import { history } from "../..";
 import { Activity, ActivityFormValues } from "../models/activity";
 import { PaginatedResult } from "../models/pagination";
 import { Photo, Profile, UserActivity } from "../models/profile";
-import { User, UserFomValues } from "../models/user";
+import { ForgotPasswordFormValues, User, UserFomValues } from "../models/user";
 import { store } from "../stores/store";
 
 // const sleep = (delay: number) => {
@@ -100,11 +100,11 @@ const Activities = {
         requests.post<void>(`/account/verifyEmail?token=${token}&email=${email}`, {}),
     resendEmailConfirm: (email: string) => 
         requests.get(`/account/resendEmailConfirmationLink?email=${email}`),
-        changePassword: (password: string) => requests.post<void>(`/account/changePassword`, { password }),
+        changePassword: (user: ForgotPasswordFormValues) => requests.post<User>('/account/resetPassword', user),
         changePasswordConfirm: (password: string, token: string, email: string) => 
-        requests.post<void>(`/account/resetPassword?password=${password}&token=${token}&email=${email}`, {}),
+        requests.post<void>(`/account/resetPassword?&token=${token}&email=${email}&password=${password}`, {}),
 
-    forgotPassword: (email: string) => requests.get<void>(`/account/forgotpassword?email=${email}`),
+    forgotPassword: (email: string) => requests.post<void>(`/account/forgotpassword?email=${email}`, {}),
     
 }
 

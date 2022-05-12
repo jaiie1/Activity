@@ -10,11 +10,9 @@ import { useStore } from '../../stores/store';
 
 export default function ChangePassword() { 
     const { userStore } = useStore();
-    const { changePassword } = userStore;
-
+    const { changePasswordasync, changePassword } = userStore;
     const email = useQuery().get('email') as string;
-    const token = useQuery().get('oldPassword') as string;
-    const password = useQuery().get('password') as string;
+    const token = useQuery().get('token') as string;
     
 
     
@@ -25,11 +23,11 @@ export default function ChangePassword() {
             <Header.Content>Byta lösenord</Header.Content>
         </Header>
         <Formik initialValues={{ password: '', token: '', email: '', error: null }}
-            onSubmit={(values, { setErrors }) => changePassword(password, token, email).catch(error =>
+            onSubmit={(values, { setErrors }) => changePassword(token, values.password, email).catch(error =>
                 setErrors({ error: error.response.data }))}>
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form onSubmit={handleSubmit}>      
-                    <MyTextInput name='password' placeholder='Password' />
+                    <MyTextInput name='password' placeholder='Password' type='Password'  />
                     <ErrorMessage name='error' render={() =>
                         <Label style={{ marginBotton: 10 }} basic color='red' content={errors.error} />}
                     />
@@ -47,3 +45,5 @@ export default function ChangePassword() {
     </Segment>
             
 )}
+
+

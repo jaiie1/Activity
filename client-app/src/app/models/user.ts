@@ -13,3 +13,11 @@ export interface UserFomValues{
     displayName?: string;
     userName?: string;
 }
+
+
+
+export interface ForgotPasswordFormValues {
+    email: string;
+    token: string;
+    password: string;
+}

@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import agent from "../api/agent";
-import { User, UserFomValues } from "../models/user";
+import { ForgotPasswordFormValues, User, UserFomValues } from "../models/user";
 import { store } from "./store";
 
 export default class UserStore {
@@ -31,8 +31,6 @@ export default class UserStore {
             throw error;
         }
     }
-
-
 
     logout = () => {
         store.commonStore.setToken(null);
@@ -73,9 +71,10 @@ export default class UserStore {
         }
     }
 
-    changePassword = async (password: string, token: string, email: string) => {
+    changePasswordasync = async (user: ForgotPasswordFormValues) => {
         try {
-            await agent.Account.changePasswordConfirm(password, token, email);            
+            console.log(user);
+            await agent.Account.changePassword(user);                        
             history.push('/')          
             toast.info('Ändrat lösenord är klart');
         } catch (error) {
@@ -83,17 +82,16 @@ export default class UserStore {
         }
     }
 
-    
-
-    // forgotpassreset = async (creds: UserFomValues) => {
-    //     try {
-    //         await agent.Account.forgotpassreset(creds);
-    //         history.push(`/account/forgotPasswordSuccess?email=${creds.email}`);
-    //         store.modelStore.closeModel();
-    //     } catch (error) {
-    //         throw error;
-    //     }
-    // }
+    changePassword = async (password: string, token: string, email: string) => {
+        try {
+            console.log(password, token, email);
+            await agent.Account.changePasswordConfirm(token, password, email);                        
+            history.push('/')          
+            toast.info('Ändrat lösenord är klart');
+        } catch (error) {
+            throw error;
+        }
+    }
 
     setImage = (image: string) => {
         if(this.user) this.user.image = image;

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using API.DTO;
 using API.Services;
 using Domain;
@@ -82,6 +83,9 @@ namespace API.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+            user.SecurityStamp = Guid.NewGuid().ToString();
+            await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded) return BadRequest("problem register user");
 
@@ -163,49 +167,53 @@ namespace API.Controllers
 
             return CreateUserObject(user);
 
-        }       
+        }
 
-        [AllowAnonymous]
-        [HttpGet("forgotpassword")]
+       [AllowAnonymous]
+        [HttpPost("forgotPassword")]
         public async Task<IActionResult> ForgotPassword(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            if(user != null && await _userManager.IsEmailConfirmedAsync(user))
-            {
-                
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);                              
+            if (user == null) return Unauthorized();
 
             var origin = Request.Headers["origin"];
-            var resetUrl = $"{origin}/account/resetPassword?token={token}&email={user.Email}";
-            var message = $"<p>Please click the below link to reset your password:</p><p><a href='{resetUrl}'>Click to reset password</a></p>";
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-            await _emailSender.SendEmailAsync(user.Email, "Please reset your password", message);
-           
-            }
+            var verifyUrl = $"{origin}/account/resetPassword?token={token}&email={user.Email}";
+            var message = $"<p>Please click the below link to reset your password:</p><p><a href='{verifyUrl}'>Click to reset password</a></p>";
 
-             return Ok("Password reset link sent");
-            
-        }     
+            await _emailSender.SendEmailAsync(user.Email, "Please reset password", message);
+
+            return Ok("Password reset link sent");
+        }
+
 
         [AllowAnonymous]
         [HttpPost("resetPassword")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+        public async Task<IActionResult> ResetPassword(string email, string token, string password)
         {
-            var user = await _userManager.FindByEmailAsync(resetPasswordDto.Email);
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (user == null) return BadRequest("Finner ingen anv�ndare");
+            if (user == null) return Unauthorized();
 
-            var newHashedpassword = _userManager.PasswordHasher.HashPassword(user, resetPasswordDto.Password);
-            user.PasswordHash = newHashedpassword;
+            var decodedTokenBytes = WebEncoders.Base64UrlDecode(token);
+            var decodedToken = Encoding.UTF8.GetString(decodedTokenBytes);
 
-            var result = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);    
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, password);
 
-            if (!result.Succeeded) return BadRequest("Hej");
+            if (!result.Succeeded) return BadRequest("Could not reset password");
 
-            return Ok("Password reset success");            
+            return Ok("Password reset");
         }
 
+        private string generateAString()
+        {
+            var random = new Random();
+
+            return random.Next(1, 1000000).ToString();
+        }
 
         private async Task SetRefreshToken(AppUser appUser)
         {
@@ -218,7 +226,7 @@ namespace API.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7),               
+                Expires = DateTime.UtcNow.AddDays(7),
             };
 
             Response.Cookies.Append("refreshToken", token.Token, cookieOptions);
