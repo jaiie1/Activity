@@ -1,6 +1,6 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import React from 'react';
-import { Button, Header, Label } from 'semantic-ui-react';
+import { Button, Header, Label} from 'semantic-ui-react';
 import MyTextInput from '../../common/form/MyTextInput';
 import { useStore } from '../../stores/store';
 import RegisterForm from "../users/RegisterForm";
@@ -30,8 +30,7 @@ export default function LoginForm() {
                         <Button.Or />
                         <Button onClick={() => modelStore.closeModel()} content='Bakåt'  color='blue' fluid />
                        
-                    </Button.Group>
-                    
+                    </Button.Group>                                    
                     <Button onClick={() => modelStore.openModal(<ForgotPasswordForm />)} content='Återställ lösenord' type='forgotpassword' fluid />
                 </Form>
                 

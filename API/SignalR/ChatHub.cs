@@ -25,6 +25,7 @@ namespace API.SignalR
         public async Task DeleteComment(Guid commentId)
         {
             var command = await _mediator.Send(new Delete.Command { Id = commentId });  
+            
             await Clients.Client(commentId.ToString())
                 .SendAsync("DeleteComment", commentId);
 

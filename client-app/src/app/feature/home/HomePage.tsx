@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Header, Image, Message, Segment } from "semantic-ui-react";
+import { Button, Container, Grid, Header, Image, Message, Segment } from "semantic-ui-react";
 
 import { useStore } from "../../stores/store";
 import ForgotPasswordForm from "../users/ForgotPasswordForm";
@@ -11,13 +11,9 @@ export default function HomePage() {
     const { userStore, modelStore } = useStore();
 
     return (
-
         <Segment inverted textAlign='center' vertical className='masthead'>
             <Container text>
-                <Header as='h1' inverted>
-                    <Image size='massive' src='/assets/logo.png' alt='logo' style={{ marginBottom: 12 }} />
-                    Aktiviteter
-                </Header>
+
                 {userStore.isLoggedIn ? (
                     <>
                         <Header as='h2' inverted content='Välkommen till Aktivitier' />
@@ -25,17 +21,26 @@ export default function HomePage() {
                     </>
                 ) : (
                     <>
-                        <Header as='h2' inverted content='Välkommen till Aktivitier i ditt område ' />
-                        <Button onClick={() => modelStore.openModal(<LoginForm />)} size='huge' inverted>Logga in</Button>
-                        <Button onClick={() => modelStore.openModal(<RegisterForm />)} size='huge' inverted>Registrera dig</Button>          
-                            <Message.Header>Har du glömt lösenord?</Message.Header>
-                            <p>
-                                <Button color="green" onClick={() => modelStore.openModal(<ForgotPasswordForm />)} size='tiny' inverted>
-                                    Återställ lösenord
-                                </Button>
-                            </p>
-               
+                        <Grid columns={2} stackable textAlign='center'>
+                            <Grid.Column>
+                                <Header as='h2' inverted content='Välkommen till Aktivitier' />
+                                <Button onClick={() => modelStore.openModal(<LoginForm />)} size='huge' inverted>Logga in</Button>
+                                <Button onClick={() => modelStore.openModal(<RegisterForm />)} size='huge' inverted>Registrera dig</Button>
+                                <Message.Header>Har du glömt lösenord?</Message.Header>
+                                <p>
+                                    <Button onClick={() => modelStore.openModal(<ForgotPasswordForm />)} size='tiny' inverted>
+                                        Återställ lösenord
+                                    </Button>
+                                </p>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Header as='h1' inverted>
+                                    <Image  src='/assets/Untitled2.png' alt='logo' style={{ marginLeft: 150 }} />
+                                    </Header>
+                            </Grid.Column>
+                        </Grid>
                     </>
+
                 )}
             </Container>
         </Segment>

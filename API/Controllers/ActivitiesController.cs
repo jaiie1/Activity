@@ -4,7 +4,6 @@ using Domain;
 using System;
 using Application.Activities;
 using Microsoft.AspNetCore.Authorization;
-using Application.Core;
 
 namespace API.Controllers
 {

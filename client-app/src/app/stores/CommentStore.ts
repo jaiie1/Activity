@@ -1,11 +1,13 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { makeAutoObservable, runInAction } from "mobx";
 import { ChatComment } from "../models/comment";
+import { Profile } from "../models/profile";
 import { store } from "./store";
 
 export default class CommentStore {
     comments: ChatComment[] = [];
     hubConnection: HubConnection | null = null;
+    profile: Profile | null = null;
 
     constructor() {
         makeAutoObservable(this);
@@ -49,6 +51,13 @@ export default class CommentStore {
     clearComments = () => {
         this.comments = [];
         this.stopHubConnection();
+    }
+
+    get isCurrentUser() {
+        if (store.userStore.user && this.profile) {
+            return store.userStore.user.username === this.profile.username;
+        }
+        return false;
     }
 
     addComment = async (values: any) => {

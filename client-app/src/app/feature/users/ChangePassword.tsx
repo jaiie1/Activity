@@ -10,7 +10,7 @@ import { useStore } from '../../stores/store';
 
 export default function ChangePassword() { 
     const { userStore } = useStore();
-    const { changePasswordasync, changePassword } = userStore;
+    const {changePassword } = userStore;
     const email = useQuery().get('email') as string;
     const token = useQuery().get('token') as string;
     
