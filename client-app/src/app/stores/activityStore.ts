@@ -92,10 +92,11 @@ export default class ActivityStore {
         this.loadingInitial = true;
         try {
             const result = await agent.Activities.list(this.axiosParams);
-            console.log(result);
-            result.forEach(activity => {
+            console.log(result.pagination);
+            result.data.forEach(activity => {
                 this.setActivity(activity);
-            })            
+            });
+            this.setPagination(result.pagination);
             this.setLoadingInital(false);
         } catch (error) {
             console.log(error);
