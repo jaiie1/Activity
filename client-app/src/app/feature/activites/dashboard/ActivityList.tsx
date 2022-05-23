@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { Fragment } from "react";
-import { Header} from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
 import { useStore } from "../../../stores/store";
 import ActivityListItem from "./ActivitylistItem";
 
@@ -19,7 +19,6 @@ export default observer(function ActivityList() {
                     {activities.map(activity => (
                         <ActivityListItem key={activity.id} activity={activity} />
                     ))}
-
                 </Fragment>
             ))}
         </>

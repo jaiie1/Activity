@@ -7,13 +7,15 @@ import * as Yup from 'yup';
 import { formatDistanceToNow } from 'date-fns'
 import { useStore } from '../../../stores/store'
 
+
 interface Props {
     activityId: string;
 }
 
 export default observer(function ActivityDetailedChat({ activityId }: Props) {
     const { commentStore } = useStore();
-    const { deleteComment } = commentStore
+    const { commentStore: {deleteComment} } = useStore();
+ 
     const [target, setTarget] = useState('');
 
 
@@ -93,9 +95,11 @@ export default observer(function ActivityDetailedChat({ activityId }: Props) {
                                     <div>{formatDistanceToNow(comment.createdAt)} ago</div>
                                 </Comment.Metadata>
                                 <Comment.Text style={{ whiteSpace: 'pre-wrap' }}>{comment.body}</Comment.Text>
+                          
                                 <Button basic
                                     color="green"                                
                                     onClick={e => handleDeleteCommment(comment.id, e)}>Delete</Button>
+                              
                             </Comment.Content>
 
                         </Comment>

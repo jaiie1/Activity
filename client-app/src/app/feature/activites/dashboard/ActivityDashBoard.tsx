@@ -24,7 +24,7 @@ export default observer(function ActivityDashBoard() {
 
     useEffect(() => {
         if (activityRegistry.size <= 1) loadActivities();
-    }, [loadActivities, activityRegistry]);
+    }, [loadActivities, activityRegistry.size]);
 
   
 
@@ -35,15 +35,16 @@ export default observer(function ActivityDashBoard() {
                     <>
                         <ActivityListItemPlaceholder />
                         <ActivityListItemPlaceholder />
+                        
                     </>
                 ) : (
                     <InfiniteScroll
                         pageStart={0}
                         loadMore={handleGetNext}
                         hasMore={!LoadingNext && !!pagination && pagination.currentPage < pagination.totalPages}
-                        initialLoad={false}
+                        initialLoad={false}                      
                     >
-                        <ActivityList />
+                       <ActivityList />
                     </InfiniteScroll>
 
                 )}
@@ -54,7 +55,7 @@ export default observer(function ActivityDashBoard() {
                 <ActivityFilters />
             </Grid.Column>
             <Grid.Column width='10'>
-                <Loader activity={LoadingNext} />
+                <Loader active={LoadingNext} />
             </Grid.Column>
 
         </Grid>

@@ -34,7 +34,7 @@ export default class ProfileStore {
         this.activeTab = activeTab;
     }
 
-    get isCurrentUser() {
+    get isCurrentUser() {        
         if (store.userStore.user && this.profile) {
             return store.userStore.user.username === this.profile.username;
         }

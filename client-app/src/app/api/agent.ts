@@ -82,7 +82,7 @@ const requests = {
 
 
 const Activities = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Activity[]>>('/activities', { params })
+    list: (params: URLSearchParams) => axios.get<Activity[]>('/activities', { params })
         .then(responseBody),
     details: (id: string) => requests.get<Activity>(`/activities/${id}`),
     create: (activity: ActivityFormValues) => requests.post<void>('/activities', activity),

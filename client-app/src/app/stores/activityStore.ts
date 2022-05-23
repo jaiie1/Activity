@@ -81,10 +81,10 @@ export default class ActivityStore {
     get groupActivitiesByDate() {
         return Object.entries(
             this.activitiesByDate.reduce((activities, activity) => {
-                const date = format(activity.date!, "dd MMM yyyy");
+                const date = format(activity.date!, 'dd MMM yyyy');
                 activities[date] = activities[date] ? [...activities[date], activity] : [activity];
                 return activities;
-            }, {} as { [key: string]: Activity[] })
+            }, {} as {[key: string]: Activity[]})
         )
     }
 
@@ -92,16 +92,15 @@ export default class ActivityStore {
         this.loadingInitial = true;
         try {
             const result = await agent.Activities.list(this.axiosParams);
-            result.data.forEach((activity: Activity) => {
+            console.log(result);
+            result.forEach(activity => {
                 this.setActivity(activity);
-            })
-            this.setPagination(result.pagination);
-            this.setLoadingInital(false)
+            })            
+            this.setLoadingInital(false);
         } catch (error) {
             console.log(error);
-            this.setLoadingInital(false)
+            this.setLoadingInital(false);
         }
-
     }
 
     setPagination = (pagination: Pagination) => {
@@ -277,6 +276,3 @@ export default class ActivityStore {
     }
 
 }
-
-
-

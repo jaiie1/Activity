@@ -13,6 +13,14 @@ export default class CommentStore {
         makeAutoObservable(this);
     }
 
+    get isCurrentUser() {     
+        console.log("isCurrentUser: " + this.profile?.username);  
+        if (store.userStore.user && this.profile) {           
+            return store.userStore.user.username === this.profile.username;
+        }
+        return false;
+    }
+
     createHubConnection = (activityId: string) => {
         if (store.activityStore.selectedActivity) {         
             this.hubConnection = new HubConnectionBuilder()
@@ -41,7 +49,23 @@ export default class CommentStore {
                     this.comments.unshift(comment)
                 });
             })
-        }
+            
+            this.hubConnection.on('RemoveComment', (comment: ChatComment) => {
+                runInAction(() => {
+                    this.comments = this.comments.filter(c => c.id !== comment.id)                                    
+                    this.comments.unshift(comment)
+
+                });
+            })   
+
+            this.hubConnection.on('DeleteComment', (comment: ChatComment) => {
+                runInAction(() => {
+                    this.comments = this.comments.filter(c => c.id !== comment.id)                                    
+                    this.comments.unshift(comment)
+
+                });  
+            }) 
+       }
     }
 
     stopHubConnection = () => {
@@ -53,12 +77,7 @@ export default class CommentStore {
         this.stopHubConnection();
     }
 
-    get isCurrentUser() {
-        if (store.userStore.user && this.profile) {
-            return store.userStore.user.username === this.profile.username;
-        }
-        return false;
-    }
+   
 
     addComment = async (values: any) => {
         values.activityId = store.activityStore.selectedActivity?.id;
