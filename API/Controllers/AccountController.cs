@@ -205,14 +205,7 @@ namespace API.Controllers
             if (!result.Succeeded) return BadRequest("Could not reset password");
 
             return Ok("Password reset");
-        }
-
-        private string generateAString()
-        {
-            var random = new Random();
-
-            return random.Next(1, 1000000).ToString();
-        }
+        }      
 
         private async Task SetRefreshToken(AppUser appUser)
         {

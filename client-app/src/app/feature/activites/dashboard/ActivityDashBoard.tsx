@@ -24,7 +24,7 @@ export default observer(function ActivityDashBoard() {
 
     useEffect(() => {
         if (activityRegistry.size <= 1) loadActivities();
-    }, [loadActivities, activityRegistry.size]);
+    }, [activityRegistry.size, loadActivities]);
 
   
 

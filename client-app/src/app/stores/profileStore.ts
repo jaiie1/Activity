@@ -132,13 +132,14 @@ export default class ProfileStore {
         }
     }
 
-    updateFollowing = async (userName: string, following: boolean) => {
+    updateFollowing = async (username: string, following: boolean) => {
         this.loading = true;
         try {
-            await agent.Profiles.updateFollowing(userName);
-            store.activityStore.updateAttendeeFollowing(userName);
+            await agent.Profiles.updateFollowing(username);
+            store.activityStore.updateAttendeeFollowing(username);
+            console.log(following);
             runInAction(() => {
-                if (this.profile && this.profile.username !== store.userStore.user?.username && this.profile.username === userName) {
+                if (this.profile && this.profile.username !== store.userStore.user?.username && this.profile.username === username) {
                     following ? this.profile.followersCount++ : this.profile.followersCount--;
                     this.profile.following = !this.profile.following;
                 }
@@ -146,7 +147,7 @@ export default class ProfileStore {
                     following ? this.profile.followingCount++ : this.profile.followingCount--;
                 }
                 this.followings.forEach(profile => {
-                    if (profile.username === userName) {
+                    if (profile.username === username) {
                         profile.following ? profile.followersCount-- : profile.followersCount++;
                         profile.following = !profile.following;
                     }
