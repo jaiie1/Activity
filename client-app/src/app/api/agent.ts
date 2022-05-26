@@ -16,18 +16,20 @@ import { store } from "../stores/store";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
-axios.interceptors.request.use((config: any) => {
+axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
     if (token) config.headers.Authorization = `Bearer ${token}`
     return config;
 })
 
 axios.interceptors.response.use(async (response) => {    
-    const pagination = response.headers['pagination'];
+    const pagination = response.headers['pagination']; 
+    console.log('pagination', pagination);
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
         return response as AxiosResponse<PaginatedResult<any>>
-    }
+        
+    }    
     return response;
 
 }, (error: AxiosError) => {

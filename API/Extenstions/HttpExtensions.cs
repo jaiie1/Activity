@@ -1,22 +1,21 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
 
 namespace API.Extenstions
 {
-    public static class HttpExtensions
+   public static class HttpExtensions
     {
-        public static void AddPaginationsHeader(this HttpResponse response, int currantPage, int itemsPerPage, int totalItems, int totalPages)
+        public static void AddPaginationHeader(this HttpResponse response, int currentPage,
+            int itemsPerPage, int totalItems, int totalPages)
         {
             var paginationHeader = new 
             {
-                currantPage,
+                currentPage,
                 itemsPerPage,
                 totalItems,
                 totalPages
-            };            
-            response.Headers.Add("pagination",
-                JsonConvert.SerializeObject(paginationHeader));           
-           
+            };
+            response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationHeader));
         }
     }
 }

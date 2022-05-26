@@ -24,3 +24,4 @@ export class PagingParams {
         this.pageSize = pageSize;
     }
 }
+

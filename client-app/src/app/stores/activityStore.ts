@@ -30,8 +30,10 @@ export default class ActivityStore {
         )
     }
 
-    setPagingParams(params: PagingParams) {
-        this.pagingParams = params;
+    setPagingParams(pagingParams: PagingParams) { 
+        console.log('PageNumber', pagingParams.pageNumber)      
+        this.pagingParams = pagingParams;
+                
     }
 
     setPredicate = (predicate: string, value: string | Date) => {
@@ -64,8 +66,8 @@ export default class ActivityStore {
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
         this.predicate.forEach((value, key) => {
-            if(key === 'startDate'){
-                params.append(key, (value as Date).toISOString());
+            if (key === 'startDate') {
+                params.append(key, (value as Date).toISOString())
             } else {
                 params.append(key, value);
             }
@@ -97,6 +99,7 @@ export default class ActivityStore {
                 this.setActivity(activity);
             });
             this.setPagination(result.pagination);
+            console.log(result.pagination);
             this.setLoadingInital(false);
         } catch (error) {
             console.log(error);
