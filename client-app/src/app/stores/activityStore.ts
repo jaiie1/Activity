@@ -30,10 +30,8 @@ export default class ActivityStore {
         )
     }
 
-    setPagingParams(pagingParams: PagingParams) { 
-        console.log('PageNumber', pagingParams.pageNumber)      
+    setPagingParams = (pagingParams: PagingParams) => {
         this.pagingParams = pagingParams;
-                
     }
 
     setPredicate = (predicate: string, value: string | Date) => {
@@ -94,12 +92,11 @@ export default class ActivityStore {
         this.loadingInitial = true;
         try {
             const result = await agent.Activities.list(this.axiosParams);
-            console.log(result.pagination);
+            console.log("LoadActivity", result.pagination);
             result.data.forEach(activity => {
                 this.setActivity(activity);
             });
-            this.setPagination(result.pagination);
-            console.log(result.pagination);
+            this.setPagination(result.pagination);          
             this.setLoadingInital(false);
         } catch (error) {
             console.log(error);
@@ -109,6 +106,7 @@ export default class ActivityStore {
 
     setPagination = (pagination: Pagination) => {
         this.pagination = pagination;
+        console.log("SetPagination", this.pagination);
     }
 
     loadActivity = async (id: string) => {

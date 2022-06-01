@@ -8,27 +8,26 @@ import { ForgotPasswordFormValues, User, UserFomValues } from "../models/user";
 import { store } from "../stores/store";
 
 // const sleep = (delay: number) => {
-//     return new Promise(resolve => {
-//         setTimeout(resolve, delay);
-//     });
+//     return new Promise((resolve) => {
+//         setTimeout(resolve, delay)
+//     })
 // }
 
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 
 axios.interceptors.request.use(config => {
-    const token = store.commonStore.token;
+    const token = store.commonStore.token;;
     if (token) config.headers.Authorization = `Bearer ${token}`
     return config;
 })
 
-axios.interceptors.response.use(async (response) => {    
-    const pagination = response.headers['pagination']; 
-    console.log('pagination', pagination);
+axios.interceptors.response.use(async response => {    
+    const pagination = response.headers['pagination'];
+    console.log("axios", pagination);
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
         return response as AxiosResponse<PaginatedResult<any>>
-        
     }    
     return response;
 
@@ -85,7 +84,7 @@ const requests = {
 
 const Activities = {
     list: (params: URLSearchParams) => axios.get<PaginatedResult<Activity[]>>('/activities', { params })
-        .then(responseBody),
+    .then(responseBody),
     details: (id: string) => requests.get<Activity>(`/activities/${id}`),
     create: (activity: ActivityFormValues) => requests.post<void>('/activities', activity),
     update: (activity: ActivityFormValues) => requests.put<void>(`/activities/${activity.id}`, activity),

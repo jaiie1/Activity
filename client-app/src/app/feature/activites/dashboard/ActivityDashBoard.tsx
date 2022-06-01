@@ -18,7 +18,7 @@ export default observer(function ActivityDashBoard() {
 
     function handleGetNext() {
         setLoadingNext(true);
-        setPagingParams(new PagingParams(pagination!.currentPage + 1))         
+        setPagingParams(new PagingParams(pagination!.currentPage + 1))               
         loadActivities().then(() => setLoadingNext(false));
    
     }
