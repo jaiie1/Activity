@@ -7,22 +7,23 @@ import { Photo, Profile, UserActivity } from "../models/profile";
 import { ForgotPasswordFormValues, User, UserFomValues } from "../models/user";
 import { store } from "../stores/store";
 
-// const sleep = (delay: number) => {
-//     return new Promise((resolve) => {
-//         setTimeout(resolve, delay)
-//     })
-// }
+const sleep = (delay: number) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, delay)
+    })
+}
 
 
-axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
-axios.interceptors.request.use(config => {
+axios.interceptors.request.use(config => {    
     const token = store.commonStore.token;;
     if (token) config.headers.Authorization = `Bearer ${token}`
     return config;
 })
 
-axios.interceptors.response.use(async response => {    
+axios.interceptors.response.use(async response => {
+    if(process.env.NODE_ENV === 'development') await sleep(1000); // for development only    
     const pagination = response.headers['pagination'];
     console.log("axios", pagination);
     if (pagination) {
